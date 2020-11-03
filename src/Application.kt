@@ -7,6 +7,7 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import se.hkr.bikesharektor.models.Bike
 import se.hkr.bikesharektor.models.Station
 import se.hkr.bikesharektor.repos.BikeRepository
 import se.hkr.bikesharektor.repos.StationRepository
@@ -55,6 +56,7 @@ fun Application.module(testing: Boolean = false) {
                     val station = stationService.getStation(id)
                     if (station != null)
                         call.respond(HttpStatusCode.OK, station)
+                    return@get
                 }
                 call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
             }
@@ -69,11 +71,33 @@ fun Application.module(testing: Boolean = false) {
             delete("/{id}") {
                 val id = call.parameters["id"]?.toIntOrNull()
                 if (id != null) {
-                    if (stationService.removeStation(id))
+                    if (stationService.removeStation(id)) {
                         call.respond(HttpStatusCode.OK)
+                        return@delete
+                    }
                 }
                 call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
             }
+
+            post("/{id}/addbike") {
+                val id = call.parameters["id"]?.toIntOrNull()
+                if (id == null) {
+                    call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
+                    return@post
+                }
+
+                val station = stationService.getStation(id)
+                if (station == null) {
+                    call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
+                    return@post
+                }
+
+                val bike = call.receive<Bike>()
+                // TODO: change this to service to update mock data about new bike
+                station.addBike(bike)
+            }
+
+
         }
     }
 }
