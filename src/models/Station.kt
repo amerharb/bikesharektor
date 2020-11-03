@@ -8,6 +8,6 @@ data class Station(
         val latitude: Int,
         val longitude: Int,
         val numberOfSlots: Int,
-        val bikes: ArrayList<Bike> = ArrayList<Bike>(), // currently parked at the station
-        val hiredBikesToReturn: ArrayList<Bike> = ArrayList<Bike>(),
+        val bikes: List<Bike> = emptyList(), // currently parked at the station
+        val hiredBikesToReturn: List<Bike> = emptyList(),
 )
