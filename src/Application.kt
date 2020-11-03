@@ -20,7 +20,8 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
     val bikeService = BikeService(BikeRepository())
     val stationService = StationService(StationRepository())
-    data class X(val p1:Int)
+
+    data class X(val p1: Int)
 
     install(ContentNegotiation) {
         gson {}
@@ -63,6 +64,15 @@ fun Application.module(testing: Boolean = false) {
                 val station = call.receive<Station>()
                 stationService.addStation(station)
                 call.respond(HttpStatusCode.OK)
+            }
+
+            delete("/{id}") {
+                val id = call.parameters["id"]?.toIntOrNull()
+                if (id != null) {
+                    if (stationService.removeStation(id))
+                        call.respond(HttpStatusCode.OK)
+                }
+                call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
             }
         }
     }
