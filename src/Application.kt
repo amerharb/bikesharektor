@@ -43,11 +43,17 @@ fun Application.module(testing: Boolean = false) {
 
         route("/stations") {
             get {
-                TODO()
+                call.respond(HttpStatusCode.OK, stationService.getAllStations())
             }
 
             get("/{id}") {
-                TODO()
+                val id = call.parameters["id"]?.toIntOrNull()
+                if (id != null) {
+                    val station = stationService.getStation(id)
+                    if (station != null)
+                        call.respond(HttpStatusCode.OK, station)
+                }
+                call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
             }
         }
     }
