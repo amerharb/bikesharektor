@@ -4,8 +4,10 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
 import io.ktor.http.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import se.hkr.bikesharektor.models.Station
 import se.hkr.bikesharektor.repos.BikeRepository
 import se.hkr.bikesharektor.repos.StationRepository
 import se.hkr.bikesharektor.services.BikeService
@@ -54,6 +56,13 @@ fun Application.module(testing: Boolean = false) {
                         call.respond(HttpStatusCode.OK, station)
                 }
                 call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
+            }
+
+            post {
+                // TODO: check unsupported body
+                val station = call.receive<Station>()
+                stationService.addStation(station)
+                call.respond(HttpStatusCode.OK)
             }
         }
     }
