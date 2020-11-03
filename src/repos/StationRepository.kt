@@ -1,4 +1,4 @@
-package repos
+package se.hkr.bikesharektor.repos
 
 import se.hkr.bikesharektor.models.Bike
 import se.hkr.bikesharektor.models.Station
@@ -11,8 +11,7 @@ class StationRepository {
 
     fun getById(stationId: Int) = MockDatabase.stations.firstOrNull { it.id == stationId }
 
-    val all: List<Station>
-        get() = MockDatabase.stations
+    fun getAll() = MockDatabase.stations
 
     init {
         // add mock data

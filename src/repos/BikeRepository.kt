@@ -7,7 +7,5 @@ class BikeRepository {
         return MockDatabase.bikes.firstOrNull { it.id == bikeId }
     }
 
-    val all: List<Bike>
-        get() = MockDatabase.bikes
-
+    fun getAll() = MockDatabase.bikes
 }
