@@ -48,4 +48,16 @@ data class Station(
         }
         hiredBikesToReturn.add(bike)
     }
+
+    @Throws(Exception::class)
+    fun returnBike(bikeId: Int) {
+        val findBike = hiredBikesToReturn
+            .filter { it.id == bikeId }
+            .firstOrNull()
+            ?: throw Exception("can not return a bike not booked to return")
+        hiredBikesToReturn.remove(findBike)
+        findBike.currentStationId = id
+        findBike.destinationStationId = -1
+        bikes.add(findBike)
+    }
 }

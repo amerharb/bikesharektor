@@ -31,9 +31,9 @@ fun Application.module(testing: Boolean = false) {
     @Throws(Exception::class)
     fun takeBike(fromStationId: Int, bikeId: Int, destinationStationId: Int) {
         val fromStation: Station = stationService.getStation(fromStationId)
-            ?:throw java.lang.Exception("can not find from station")
+            ?:throw Exception("can not find from station")
         val toStation: Station = stationService.getStation(destinationStationId)
-            ?:throw java.lang.Exception("can not find destination station")
+            ?:throw Exception("can not find destination station")
 
         fromStation.takeBike(bikeId, toStation)
     }
@@ -130,8 +130,26 @@ fun Application.module(testing: Boolean = false) {
                 }
 
                 fromStation.takeBike(bikeId, toStation)
+                call.respond(HttpStatusCode.OK)
             }
 
+            post("/{id}/returnbike/{bikeId}") {
+                val id = call.parameters["id"]?.toIntOrNull()
+                val bikeId = call.parameters["bikeId"]?.toIntOrNull()
+                if (id == null || bikeId == null) {
+                    call.respond(HttpStatusCode.BadRequest, "station id or bike id must be valid int")
+                    return@post
+                }
+
+                val station = stationService.getStation(id)
+                if (station == null) {
+                    call.respond(HttpStatusCode.NotFound, "Station with id [$id] not found")
+                    return@post
+                }
+
+                station.returnBike(bikeId)
+                call.respond(HttpStatusCode.OK)
+            }
         }
     }
 }
