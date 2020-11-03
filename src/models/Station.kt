@@ -8,7 +8,7 @@ data class Station(
     val numberOfSlots: Int,
     val bikes: MutableList<Bike> = mutableListOf(), // currently parked at the station
     val hiredBikesToReturn: MutableList<Bike> = mutableListOf(),
-){
+) {
     val availableSlotsTotal = numberOfSlots - bikes.size - hiredBikesToReturn.size
 
     @Throws(Exception::class)
@@ -26,5 +26,26 @@ data class Station(
         bike.currentStationId = id
         bike.destinationStationId = -1
         bikes.add(bike)
+    }
+
+    @Throws(Exception::class)
+    fun takeBike(bikeId: Int, destinationStation: Station) {
+        val findBike = bikes
+            .filter { it.id == bikeId }
+            .firstOrNull()
+            ?: throw Exception("can not find bike")
+
+        bikes.remove(findBike)
+        findBike.currentStationId = -1
+        findBike.destinationStationId = destinationStation.id
+        destinationStation.bookSlot(findBike)
+    }
+
+    @Throws(Exception::class)
+    private fun bookSlot(bike: Bike) {
+        if (availableSlotsTotal <= 0) {
+            throw Exception("there no available slot to book")
+        }
+        hiredBikesToReturn.add(bike)
     }
 }

@@ -29,18 +29,18 @@ class StationRepository {
 
         bike105.currentStationId = 1
         bike106.currentStationId = 1
-        val currentBikesStation1 = listOf(bike105, bike106)
+        val currentBikesStation1 = mutableListOf(bike105, bike106)
         bike109.destinationStationId = 1
-        val hiredBikedStation1 = listOf(bike109)
+        val hiredBikedStation1 = mutableListOf(bike109)
         MockDatabase.stations.add(
             Station(1, "station 1", 10, 10, 12, currentBikesStation1, hiredBikedStation1)
         )
 
         bike107.currentStationId = 2
         bike108.currentStationId = 2
-        val currentBikesStation2 = listOf(bike107, bike108)
+        val currentBikesStation2 = mutableListOf(bike107, bike108)
         bike104.destinationStationId = 2
-        val hiredBikedStation2 = listOf(bike104)
+        val hiredBikedStation2 = mutableListOf(bike104)
         MockDatabase.stations.add(
             Station(2, "station 2", 100, -10, 6, currentBikesStation2, hiredBikedStation2)
         )
