@@ -33,6 +33,18 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
         }
 
+        route("/bikes") {
+            get {
+                // return a array of json of bikes
+                call.respond(HttpStatusCode.OK, "todo")
+            }
+
+            get("/{id}") {
+                // return a array of json of bikes
+                call.respond(HttpStatusCode.OK, "todo")
+            }
+        }
+
         get("/html-dsl") {
             call.respondHtml {
                 body {
